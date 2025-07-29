@@ -93,7 +93,7 @@ const MySessions = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-8">
       {toast && (
         <Toast
           message={toast.message}
@@ -114,16 +114,16 @@ const MySessions = () => {
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex justify-between items-center">
+        <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Sessions</h1>
-            <p className="mt-2 text-gray-600">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Sessions</h1>
+            <p className="mt-2 text-sm sm:text-base text-gray-600">
               Manage your wellness sessions and track their status
             </p>
           </div>
           <button
             onClick={() => navigate('/session-editor')}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-medium transition-colors w-full sm:w-auto"
           >
             Create New Session
           </button>
@@ -154,7 +154,7 @@ const MySessions = () => {
                     Drafts ({draftSessions.length})
                   </span>
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {draftSessions.map((session) => (
                     <div key={session.id} className="relative">
                       <SessionCard
@@ -185,7 +185,7 @@ const MySessions = () => {
                     Published ({publishedSessions.length})
                   </span>
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {publishedSessions.map((session) => (
                     <SessionCard
                       key={session.id}

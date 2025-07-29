@@ -6,10 +6,10 @@ const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = nul
   const statusColor = status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{title}</h3>
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 line-clamp-2 pr-2">{title}</h3>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor} flex-shrink-0`}>
           {status}
         </span>
       </div>
@@ -52,11 +52,11 @@ const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = nul
           )}
         </div>
         
-        <div className="flex space-x-2">
+        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2 sm:gap-0">
           {onEdit && (
             <button
               onClick={() => onEdit(session)}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-xs sm:text-sm transition-colors w-full sm:w-auto"
             >
               Edit
             </button>
@@ -64,7 +64,7 @@ const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = nul
           {onDelete && (
             <button
               onClick={() => onDelete(session)}
-              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-xs sm:text-sm transition-colors w-full sm:w-auto"
             >
               Delete
             </button>
