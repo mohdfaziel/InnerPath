@@ -4,11 +4,14 @@ import { sessionsAPI } from '../utils/api';
 import SessionCard from '../components/SessionCard';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Toast from '../components/Toast';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 const MySessions = () => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +52,35 @@ const MySessions = () => {
     }
   };
 
+  const handleDeleteSession = async (session) => {
+    setSessionToDelete(session);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDeleteSession = async () => {
+    if (sessionToDelete) {
+      try {
+        await sessionsAPI.deleteSession(sessionToDelete.id);
+        setToast({ message: 'Session deleted successfully!', type: 'success' });
+        fetchMySessions(); // Refresh the list
+      } catch (error) {
+        console.error('Error deleting session:', error);
+        setToast({ 
+          message: 'Failed to delete session. Please try again.', 
+          type: 'error' 
+        });
+      } finally {
+        setShowDeleteModal(false);
+        setSessionToDelete(null);
+      }
+    }
+  };
+
+  const cancelDeleteSession = () => {
+    setShowDeleteModal(false);
+    setSessionToDelete(null);
+  };
+
   const draftSessions = sessions.filter(session => session.status === 'draft');
   const publishedSessions = sessions.filter(session => session.status === 'published');
 
@@ -69,6 +101,17 @@ const MySessions = () => {
           onClose={() => setToast(null)}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={showDeleteModal}
+        onClose={cancelDeleteSession}
+        onConfirm={confirmDeleteSession}
+        title="Delete Session"
+        message="Are you sure you want to delete this session?"
+        confirmText="Delete"
+        cancelText="Cancel"
+        sessionTitle={sessionToDelete?.title}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex justify-between items-center">
@@ -118,6 +161,7 @@ const MySessions = () => {
                         session={session}
                         showAuthor={false}
                         onEdit={handleEditSession}
+                        onDelete={handleDeleteSession}
                       />
                       <div className="mt-3 flex space-x-2">
                         <button
@@ -148,6 +192,7 @@ const MySessions = () => {
                       session={session}
                       showAuthor={false}
                       onEdit={handleEditSession}
+                      onDelete={handleDeleteSession}
                     />
                   ))}
                 </div>

@@ -200,4 +200,30 @@ router.post('/my-sessions/publish', [
   }
 });
 
+// DELETE /my-sessions/:id - Delete a session (auth required)
+router.delete('/my-sessions/:id', authenticateToken, async (req, res) => {
+  try {
+    const sessionId = req.params.id;
+
+    const session = await Session.findOne({ 
+      _id: sessionId, 
+      user_id: req.user.userId 
+    });
+
+    if (!session) {
+      return res.status(404).json({ message: 'Session not found' });
+    }
+
+    await Session.findByIdAndDelete(sessionId);
+
+    res.json({
+      message: 'Session deleted successfully',
+      sessionId: sessionId
+    });
+  } catch (error) {
+    console.error('Error deleting session:', error);
+    res.status(500).json({ message: 'Failed to delete session' });
+  }
+});
+
 export default router;

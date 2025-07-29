@@ -1,6 +1,6 @@
 import { formatDate } from '../utils/helpers';
 
-const SessionCard = ({ session, showAuthor = true, onEdit = null }) => {
+const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = null }) => {
   const { title, tags, json_file_url, status, author, created_at, updated_at } = session;
 
   const statusColor = status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
@@ -52,14 +52,24 @@ const SessionCard = ({ session, showAuthor = true, onEdit = null }) => {
           )}
         </div>
         
-        {onEdit && (
-          <button
-            onClick={() => onEdit(session)}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
-          >
-            Edit
-          </button>
-        )}
+        <div className="flex space-x-2">
+          {onEdit && (
+            <button
+              onClick={() => onEdit(session)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+            >
+              Edit
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={() => onDelete(session)}
+              className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

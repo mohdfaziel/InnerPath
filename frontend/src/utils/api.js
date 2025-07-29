@@ -63,6 +63,9 @@ export const sessionsAPI = {
   
   publishSession: (sessionId) => 
     api.post('/my-sessions/publish', { sessionId }),
+  
+  deleteSession: (sessionId) => 
+    api.delete(`/my-sessions/${sessionId}`),
 };
 
 export default api;
