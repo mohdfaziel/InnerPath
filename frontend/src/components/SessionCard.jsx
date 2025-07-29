@@ -1,4 +1,4 @@
-import { formatDate } from '../utils/helpers';
+import { formatDate, getDisplayName } from '../utils/helpers';
 
 const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = null }) => {
   const { title, tags, json_file_url, status, author, created_at, updated_at } = session;
@@ -44,7 +44,7 @@ const SessionCard = ({ session, showAuthor = true, onEdit = null, onDelete = nul
       <div className="flex justify-between items-center text-sm text-gray-500">
         <div>
           {showAuthor && author && (
-            <p className="mb-1">By: {author}</p>
+            <p className="mb-1">By: {getDisplayName(author)}</p>
           )}
           <p>Created: {formatDate(created_at)}</p>
           {updated_at !== created_at && (

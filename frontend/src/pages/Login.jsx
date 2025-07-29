@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../utils/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import Toast from '../components/Toast';
+import Logo from '../components/Logo';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -57,6 +58,9 @@ const Login = () => {
       
       <div className="max-w-md w-full space-y-8">
         <div>
+          <div className="flex justify-center mb-6">
+            <Logo size="lg" />
+          </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>

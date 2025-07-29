@@ -1,5 +1,7 @@
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import Logo from './Logo';
+import { getDisplayName } from '../utils/helpers';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -13,7 +15,8 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center space-x-2">
+              <Logo size="md" />
               <h1 className="text-white text-xl font-bold">InnerPath</h1>
             </Link>
             {isAuthenticated && (
@@ -44,7 +47,7 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <span className="text-indigo-100 text-sm">
-                  Welcome, {user?.email}
+                  Welcome, {getDisplayName(user?.email)}
                 </span>
                 <button
                   onClick={handleLogout}

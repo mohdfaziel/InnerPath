@@ -43,3 +43,20 @@ export const tagsToString = (tagsArray) => {
   if (!Array.isArray(tagsArray)) return '';
   return tagsArray.join(', ');
 };
+
+// Extract display name from email
+export const getDisplayName = (email) => {
+  if (!email) return 'Unknown User';
+  
+  // Split email and get the part before @
+  const username = email.split('@')[0];
+  
+  // Replace common separators with spaces and capitalize
+  const name = username
+    .replace(/[._-]/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+    
+  return name || 'User';
+};

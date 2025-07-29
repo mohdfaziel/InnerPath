@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Logo from '../components/Logo';
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
@@ -8,6 +9,9 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
+          <div className="flex justify-center mb-6">
+            <Logo size="xl" />
+          </div>
           <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
             Welcome to <span className="text-indigo-600">InnerPath</span>
           </h1>
