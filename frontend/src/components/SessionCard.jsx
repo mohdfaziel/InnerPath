@@ -1,0 +1,68 @@
+import { formatDate } from '../utils/helpers';
+
+const SessionCard = ({ session, showAuthor = true, onEdit = null }) => {
+  const { title, tags, json_file_url, status, author, created_at, updated_at } = session;
+
+  const statusColor = status === 'published' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+      <div className="flex justify-between items-start mb-3">
+        <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">{title}</h3>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColor}`}>
+          {status}
+        </span>
+      </div>
+      
+      {tags && tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {tags.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-md text-xs"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+      
+      <div className="mb-4">
+        <p className="text-sm text-gray-600">
+          <span className="font-medium">JSON URL:</span>
+        </p>
+        <a
+          href={json_file_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-indigo-600 hover:text-indigo-700 text-sm break-all"
+        >
+          {json_file_url}
+        </a>
+      </div>
+      
+      <div className="flex justify-between items-center text-sm text-gray-500">
+        <div>
+          {showAuthor && author && (
+            <p className="mb-1">By: {author}</p>
+          )}
+          <p>Created: {formatDate(created_at)}</p>
+          {updated_at !== created_at && (
+            <p>Updated: {formatDate(updated_at)}</p>
+          )}
+        </div>
+        
+        {onEdit && (
+          <button
+            onClick={() => onEdit(session)}
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1 rounded-md text-sm transition-colors"
+          >
+            Edit
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SessionCard;
