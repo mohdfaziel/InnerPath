@@ -240,7 +240,7 @@ This project is licensed under the ISC License - see the individual README files
 
 ## 👥 Authors
 
-- Your Name - Initial work
+- Mohd Faziel - Initial work
 
 ## 🙏 Acknowledgments
 
