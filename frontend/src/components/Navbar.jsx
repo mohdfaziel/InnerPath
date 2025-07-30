@@ -12,8 +12,17 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // Show logout toast
+    setToast({ message: 'Logged out successfully!', type: 'success' });
+    
+    // Logout user
     logout();
     setIsMobileMenuOpen(false);
+    
+    // Navigate to home after a delay to show toast
+    setTimeout(() => {
+      navigate('/');
+    }, 1500);
   };
 
   const toggleMobileMenu = () => {
@@ -25,7 +34,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-indigo-600 shadow-lg">
+    <>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+      <nav className="bg-indigo-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -146,6 +163,7 @@ const Navbar = () => {
         )}
       </div>
     </nav>
+    </>
   );
 };
 
