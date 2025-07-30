@@ -42,7 +42,6 @@ const Login = () => {
       const { token, user } = response.data;
       
       // Set toast first
-      console.log('Setting login success toast');
       setToast({ message: 'Welcome back! Login successful!', type: 'success' });
       
       // Login user

@@ -19,6 +19,22 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api', sessionRoutes);
 
+// Root route for deployment verification
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'InnerPath Backend API is running!', 
+    version: '1.0.0',
+    endpoints: [
+      'GET /api/health',
+      'POST /api/auth/login',
+      'POST /api/auth/register',
+      'GET /api/sessions',
+      'GET /api/my-sessions'
+    ],
+    timestamp: new Date().toISOString() 
+  });
+});
+
 // Health check route
 app.get('/api/health', (req, res) => {
   res.json({ message: 'InnerPath API is running!', timestamp: new Date().toISOString() });
