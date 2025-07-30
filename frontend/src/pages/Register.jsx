@@ -14,6 +14,7 @@ const Register = () => {
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [errors, setErrors] = useState({});
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -23,18 +24,32 @@ const Register = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear field-specific error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: ''
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({}); // Clear any previous errors
+    
+    // Client-side validation
+    const newErrors = {};
     
     if (formData.password !== formData.confirmPassword) {
-      setToast({ message: 'Passwords do not match', type: 'error' });
-      return;
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     if (formData.password.length < 6) {
-      setToast({ message: 'Password must be at least 6 characters long', type: 'error' });
+      newErrors.password = 'Password must be at least 6 characters long';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
@@ -44,15 +59,35 @@ const Register = () => {
       const response = await authAPI.register(formData.email, formData.password);
       const { token, user } = response.data;
       
-      login(token, user);
-      setToast({ message: 'Registration successful!', type: 'success' });
+      // Set toast first
+      setToast({ message: 'Registration successful! Welcome to InnerPath!', type: 'success' });
       
+      // Login user
+      login(token, user);
+      
+      // Navigate after a delay to allow toast to show
       setTimeout(() => {
         navigate('/dashboard');
-      }, 1000);
+      }, 2000);
     } catch (error) {
       const message = error.response?.data?.message || 'Registration failed. Please try again.';
-      setToast({ message, type: 'error' });
+      
+      // Handle validation errors
+      if (error.response?.data?.errors) {
+        const fieldErrors = {};
+        error.response.data.errors.forEach(err => {
+          fieldErrors[err.path || err.param] = err.msg;
+        });
+        setErrors(fieldErrors);
+      } else if (error.response?.status === 409) {
+        // User already exists
+        setErrors({
+          email: 'An account with this email already exists'
+        });
+      } else {
+        // General error - show toast
+        setToast({ message, type: 'error' });
+      }
     } finally {
       setLoading(false);
     }
@@ -100,9 +135,14 @@ const Register = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
             
             <div>
@@ -116,9 +156,14 @@ const Register = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
+                  errors.password ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Enter your password (min 6 characters)"
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
             </div>
             
             <div>
@@ -132,9 +177,14 @@ const Register = () => {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Confirm your password"
               />
+              {errors.confirmPassword && (
+                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+              )}
             </div>
           </div>
 

@@ -28,8 +28,13 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      // Token expired or invalid
+    // Only redirect on 401/403 if user has a token (meaning they were logged in but token expired)
+    // Don't redirect on login/register endpoints as those should handle their own errors
+    const isAuthEndpoint = error.config?.url?.includes('/auth/');
+    const hasToken = localStorage.getItem('innerpath_token');
+    
+    if ((error.response?.status === 401 || error.response?.status === 403) && !isAuthEndpoint && hasToken) {
+      // Token expired or invalid - only redirect if user was previously logged in
       localStorage.removeItem('innerpath_token');
       localStorage.removeItem('innerpath_user');
       window.location.href = '/login';

@@ -1,12 +1,15 @@
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Logo from './Logo';
+import Toast from './Toast';
 import { getDisplayName } from '../utils/helpers';
 
 const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();

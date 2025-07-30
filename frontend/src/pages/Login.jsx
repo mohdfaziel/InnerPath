@@ -13,6 +13,7 @@ const Login = () => {
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [errors, setErrors] = useState({});
   
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -22,25 +23,54 @@ const Login = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear field-specific error when user starts typing
+    if (errors[e.target.name]) {
+      setErrors({
+        ...errors,
+        [e.target.name]: ''
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrors({}); // Clear any previous errors
 
     try {
       const response = await authAPI.login(formData.email, formData.password);
       const { token, user } = response.data;
       
-      login(token, user);
-      setToast({ message: 'Login successful!', type: 'success' });
+      // Set toast first
+      setToast({ message: 'Welcome back! Login successful!', type: 'success' });
       
+      // Login user
+      login(token, user);
+      
+      // Navigate after a delay to allow toast to show
       setTimeout(() => {
         navigate('/dashboard');
-      }, 1000);
+      }, 2000);
     } catch (error) {
       const message = error.response?.data?.message || 'Login failed. Please try again.';
-      setToast({ message, type: 'error' });
+      
+      // Handle validation errors
+      if (error.response?.data?.errors) {
+        const fieldErrors = {};
+        error.response.data.errors.forEach(err => {
+          fieldErrors[err.path || err.param] = err.msg;
+        });
+        setErrors(fieldErrors);
+      } else if (error.response?.status === 401) {
+        // Invalid credentials - show error on both fields
+        setErrors({
+          email: 'Invalid email or password',
+          password: 'Invalid email or password'
+        });
+      } else {
+        // General error - show toast
+        setToast({ message, type: 'error' });
+      }
     } finally {
       setLoading(false);
     }
@@ -88,9 +118,14 @@ const Login = () => {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
+                  errors.email ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Enter your email"
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
             
             <div>
@@ -104,9 +139,14 @@ const Login = () => {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className={`mt-1 appearance-none relative block w-full px-3 py-2 border ${
+                  errors.password ? 'border-red-500' : 'border-gray-300'
+                } placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Enter your password"
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+              )}
             </div>
           </div>
 
