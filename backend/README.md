@@ -2,6 +2,11 @@
 
 Backend API for InnerPath - a wellness sessions platform where users can create, share, and discover meditation, yoga, and wellness content.
 
+## 🌟 Live API
+
+- **Production API**: [https://inner-path-backend.vercel.app/](https://inner-path-backend.vercel.app/)
+- **API Health Check**: [https://inner-path-backend.vercel.app/api/health](https://inner-path-backend.vercel.app/api/health)
+
 ## Features
 
 - **User Authentication**: Secure registration and login with JWT tokens
@@ -203,6 +208,49 @@ backend/
 ├── package.json         # Dependencies and scripts
 └── server.js           # Main application entry point
 ```
+
+## 🚀 Deployment
+
+### Production Deployment (Vercel)
+
+The backend is deployed on Vercel at: [https://inner-path-backend.vercel.app/](https://inner-path-backend.vercel.app/)
+
+#### Deployment Configuration
+
+1. **vercel.json** configuration:
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
+```
+
+2. **Environment Variables** (configured in Vercel dashboard):
+   - `MONGODB_URI` - MongoDB Atlas connection string
+   - `JWT_SECRET` - Secret key for JWT token signing
+   - `NODE_ENV` - Set to "production"
+
+3. **Database**: MongoDB Atlas cluster with proper network access configuration
+
+#### API Endpoints (Production)
+- Base URL: `https://inner-path-backend.vercel.app`
+- Health Check: `https://inner-path-backend.vercel.app/api/health`
+- Authentication: `https://inner-path-backend.vercel.app/api/auth/*`
+- Sessions: `https://inner-path-backend.vercel.app/api/*`
 
 ### Adding New Features
 

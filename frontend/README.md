@@ -2,6 +2,11 @@
 
 Frontend application for InnerPath - a wellness sessions platform where users can create, share, and discover meditation, yoga, and wellness content.
 
+## 🌟 Live Demo
+
+- **Production App**: [https://inner-path.vercel.app/](https://inner-path.vercel.app/)
+- **Backend API**: [https://inner-path-backend.vercel.app/](https://inner-path-backend.vercel.app/)
+
 ## Features
 
 - **User Authentication**: Secure login and registration with JWT tokens
@@ -210,21 +215,45 @@ The app uses Tailwind CSS 4 with Vite integration:
 - **Network Errors**: Graceful degradation with retry options
 - **Validation Errors**: Real-time form validation feedback
 
-## Deployment
+## 🚀 Deployment
 
-### Build for Production
+### Production Deployment (Vercel)
+
+The frontend is deployed on Vercel at: [https://inner-path.vercel.app/](https://inner-path.vercel.app/)
+
+#### Deployment Features
+- **Automatic Deployments**: Connected to GitHub for continuous deployment
+- **Production Optimizations**: Build optimized for performance
+- **CDN Distribution**: Global edge network for fast loading
+- **HTTPS**: Secure connections with automatic SSL certificates
+
+#### Build Configuration
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist/`
+- **Framework**: Vite (automatically detected)
+- **Node.js Version**: 18.x
+
+#### Environment Configuration
+The app is configured to use the production backend:
+```javascript
+const API_BASE_URL = 'https://inner-path-backend.vercel.app/api';
+```
+
+### Local Development
+
+#### Build for Production
 ```bash
 npm run build
 ```
 
-### Deploy Options
-- **Vercel**: Zero-config deployment for Vite apps
+#### Deploy Options
+- **Vercel**: Zero-config deployment for Vite apps (recommended)
 - **Netlify**: Static site hosting with form handling
 - **GitHub Pages**: Free hosting for static sites
 - **Custom Server**: Deploy `dist/` folder to any web server
 
-### Environment Variables
-Create a `.env` file for environment-specific settings:
+#### Environment Variables
+Create a `.env` file for local development:
 ```
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
